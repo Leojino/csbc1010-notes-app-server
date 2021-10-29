@@ -32,7 +32,9 @@ app.use(express.urlencoded({ extended: true }))
     host: 'localhost',
     user: 'notesserver',
     password: 'mynotesserver',
-    database: 'notes'
+    database: 'notes',
+    timezone: "Z",
+    dateStrings: true
   });
 
   databaseConnection.connect((err) => {

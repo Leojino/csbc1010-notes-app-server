@@ -15,46 +15,27 @@ router.get('/', (req, res) => {
         [{ id, text, dateCreated, lastModified }]
   */
 
-  /*
+    dbCon.query("SELECT * FROM Notes", function(error, results){
 
-    // Your code here...
+      if(error) {
+        // Upon fail, run the following line to respond with an error
 
-    const notes = [] // this is the response object, make sure to replace with actual value
+        // --- begin of fail flow ---
+        return res.status(500).send('Fail to query')
+        // --- end of fail flow ---
+      }
+      // const notes = results // this is the response object, make sure to replace with actual value
 
+      // Upon succ, run the following lines to validate the response object and respond to client
 
-
-    // Upon succ, run the following lines to validate the response object and respond to client
-
-    // --- begin of succ flow ---
-    if (!validateNoteArray(notes)) {
-      res.status(500).send('Invalid data type')
-    }
-    res.send({ notes })
-    // --- end of succ flow ---
-
-
-
-    // Upon fail, run the following line to respond with an error
-
-    // --- begin of fail flow ---
-    res.status(500).send('Fail to query')
-    // --- end of fail flow ---
+      // --- begin of succ flow ---
+      if (!validateNoteArray(results)) {
+        return res.status(500).send('Invalid data type')
+      }
+      return res.send({ notes: results })
+      // --- end of succ flow ---
     
-  */
-
-
-
-  // TODO-3.1: Remove this section once you start working on TODO-3
-  // --- Remove section begins ---
-  const notes = [ 
-    { id: 11, text: 'This is dummy note from fetch all!', dateCreated: '2021-04-15', lastModified: '2021-04-17' },
-    { id: 12, text: 'This is another dummy note from fetch all!', dateCreated: '2021-09-15', lastModified: '2021-10-17' }
-  ]
-  if (!validateNoteArray(notes)) {
-    res.status(500).send('Invalid data type')
-  }
-  res.send({ notes })
-  // --- Remove section ends ---
+  })
 })
 /* -------------------------------------------------------------------------- */
 
