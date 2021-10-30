@@ -1,5 +1,5 @@
-module.exports.validateNote = (obj) => {
-	if (!obj.id) {
+module.exports.validateNote = (obj, skipId = false) => {
+	if (!skipId && !obj.id) {
 		console.log(`\x1b[31m%s\x1b[0m`, `Missing property "id" or value undefined`)
 		console.log(`\x1b[31mObject: %s does not contain property "id" or value undefined\x1b[0m`, JSON.stringify(obj, null, 2))
 		return false

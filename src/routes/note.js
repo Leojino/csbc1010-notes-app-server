@@ -17,45 +17,32 @@ router.post('/', (req, res) => {
   		Your return object should be something similar to this:
       	{ id, text, dateCreated, lastModified }
   */
-  const newText = req.body.text
+  // const newText = req.body.text
 
-  /*
-
-    Your code here...
-
-    const newNote = {} // this is the response object, make sure to replace with actual value
-
-
+    const newNote = {
+      text: req.body.text,
+      dateCreated: new Date().toISOString().split('T')[0],
+      lastModified: new Date().toISOString().split('T')[0]
+    }
 
     // Upon succ, run the following lines to validate the response object and respond to client
 
     // --- begin of succ flow ---
-    if (!validateNote(newNote)) {
+    if (!validateNote(newNote, true)) {
       res.status(500).send('Invalid data type')
     }
-	  res.status(201).send({ newNote })
-    // --- end of succ flow ---
 
-
-
-    // Upon fail, run the following lines to respond with an error
-
-    // --- begin of fail flow ---
-    res.status(500).send('Fail to insert')
-    // --- end of fail flow ---
-    
-  */
-
-
-
-  // TODO-4.1: Remove this section once you start working on TODO-4
-  // --- Remove section begins ---
-  const newNote = { id: 2, text: newText, dateCreated: new Date().toISOString().split('T')[0], lastModified: new Date().toISOString().split('T')[0] }
-  if (!validateNote(newNote)) {
-    res.status(500).send('Invalid data type')
-  }
-  res.status(201).send({ newNote })
-  // --- Remove section ends ---
+    dbCon.query( `INSERT INTO Notes SET ?`, newNote,
+      function(error, result, fields) {
+        if(error) {
+          // --- begin of fail flow ---
+          res.status(500).send('Fail to insert')
+          // --- end of fail flow ---
+        }
+        newNote.id = result.insertId;
+        res.status(201).send({ newNote })
+      }
+    )
 })
 /* -------------------------------------------------------------------------- */
 
