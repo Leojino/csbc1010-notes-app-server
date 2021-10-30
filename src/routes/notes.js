@@ -55,44 +55,30 @@ router.get('/search/:searchKey', (req, res) => {
         [{ id, text, dateCreated, lastModified }]
   */
   const searchKey = req.params.searchKey
-  console.log(searchKey)
+  // console.log(searchKey)
  
-  /*
 
     // Your code here...
 
-    const notes = [] // this is the response object, make sure to replace with actual value
+    // const notes = [] 
 
+      dbCon.query(`SELECT * FROM Notes WHERE text LIKE "%${searchKey}%"`, function(error, results){
 
-    // Upon succ, run the following lines to validate the response object and respond to client
+        if(error) {
+          // --- begin of fail flow ---
+          return res.status(500).send('Fail to query')
+          // --- end of fail flow ---
+        }
 
-    // --- begin of succ flow ---
-    if (!validateNoteArray(notes)) {
-      res.status(500).send('Invalid data type')
-    }
-    res.send({ notes })
-    // --- end of succ flow ---
-
-
-
-    // Upon fail, run the following line to response with error
-
-    // --- begin of fail flow ---
-    res.status(500).send('Fail to query')
-    // --- end of fail flow ---
+        // --- begin of succ flow ---
+        if (!validateNoteArray(results)) {
+          res.status(500).send('Invalid data type')
+        }
+        return res.send({ notes: results })
+        // --- end of succ flow ---
+      
+    })
     
-  */
-
-
-
-  // TODO-7.1: Remove this line once you start working on TODO-7
-  // --- Remove section begins ---
-  const notes = [ { id: 5, text: `This is a dummy note from search contains search key ${searchKey}!`, dateCreated: '2021-04-15', lastModified: '2021-04-17' } ]
-  if (!validateNoteArray(notes)) {
-    res.status(500).send('Invalid data type')
-  }
-  res.send({ notes })
-  // --- Remove section ends ---
 })
 /* -------------------------------------------------------------------------- */
 
@@ -104,35 +90,19 @@ router.delete('/', (req, res) => {
     TODO-8:
       Delete all notes from the database
   */
-
-  /*
-
     // Your code here...
 
-
-
-    // Upon succ, run the following lines to validate the response object and reponse to client
-
-    // --- begin of succ flow ---
-    res.send()
-    // --- end of succ flow ---
-
-
-
-    // Upon fail, run the following line to respond with an error
-
-    // --- begin of fail flow ---
-    res.status(500).send('Fail to delete')
-    // --- end of fail flow ---
-
-  */
-
-
-
-  // TODO-8.1: Remove this section once you start working on TODO-8
-  // --- Remove section begins ---
-  res.send()
-  // --- Remove section ends ---
+    dbCon.query("TRUNCATE Notes" , function(error, result) {
+      if(error) {
+        // --- begin of fail flow ---
+        console.log(error)
+        return res.status(500).send('Fail to delete')
+        // --- end of fail flow ---
+      }
+      // --- begin of succ flow ---
+      res.send()
+      // --- end of succ flow ---
+    })
 })
 /* -------------------------------------------------------------------------- */
 
