@@ -104,35 +104,17 @@ router.delete('/', (req, res) => {
 		  Note id is stored in variable noteId 
 	*/
 	const noteId = req.body.id
-
-  /*
-
+  
     // Your code here...
 
-
-
-    // Upon succ, run the following lines to validate the response object and respond to client
-
-    // --- begin of succ flow ---
-    res.send()
-    // --- end of succ flow ---
-
-
-
-    // Upon fail, run the following lines to respond with an error
-
-    // --- begin of fail flow ---
-    res.status(500).send('Fail to delete')
-    // --- end of fail flow ---
-
-  */
-
-
-
-  // TODO-6.1: Remove this section once you start working on TODO-6
-  // --- Remove section begins ---
-  res.send()
-  // --- Remove section ends ---
+    dbCon.query( `DELETE FROM Notes WHERE id = ?`, noteId,
+      function(error) {
+        if(error) {
+          return res.status(500).send('Fail to delete');
+        }
+        res.send()
+      }
+    )
 })
 /* -------------------------------------------------------------------------- */
 
