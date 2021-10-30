@@ -64,44 +64,31 @@ router.put('/', (req, res) => {
 	*/
 	const noteId = req.body.id
 	const newText = req.body.text
+  dbCon.query( `SELECT * FROM Notes Where id = ?`, noteId, function(selectError, selectResult) {
 
-	/* 
+    if(selectError) {
+      return res.status(500).send("failed to find note");
+    }
 
-		// You code here...
+    const updatedNote = {
+      ...selectResult[0],
+      text: newText
+    }
 
-		const updatedNote = {} // this is the response object, make sure to replace with actual value
-
-
-
-    // Upon succ, run the following lines to validate the response object and respond to client
-
-    // --- begin of succ flow ---
     if (!validateNote(updatedNote)) {
-      res.status(500).send('Invalid data type')
+      return res.status(500).send('Invalid data type')
     }
-	  res.send({ updatedNote })
-    // --- end of succ flow ---
+    
+    dbCon.query( `UPDATE Notes SET text = ? WHERE id = ?`, [newText, noteId],
+      function(error) {
+        if(error) {
+          return res.status(500).send('Fail to update')
+        }
+        res.status(200).send({ updatedNote })
+      }
+    )
 
-
-
-    // Upon fail, run the following lines to respond with an error
-
-    // --- begin of fail flow ---
-    res.status(500).send('Fail to update')
-    // --- end of fail flow ---
-
-	*/
-
-
-
-		// TODO-5.1: Remove this section once you start working on TODO-5
-  	// --- Remove section begins ---
-  	const updatedNote = { id: noteId, text: newText, dateCreated: '2021-04-15', lastModified: new Date().toISOString().split('T')[0]}
-		if (!validateNote(updatedNote)) {
-      res.status(500).send('Invalid data type')
-    }
-  	res.send({ updatedNote })
-  	// --- Remove section ends ---
+  } )
 })
 /* -------------------------------------------------------------------------- */
 
